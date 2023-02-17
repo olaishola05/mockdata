@@ -1,6 +1,6 @@
 {
   "User": {
-    "_id":{
+    "_":{
       "items": 3
     },
     "firstName": { "regexp": "[A-Z][a-z]{5,10}" },
@@ -11,7 +11,7 @@
   },
 
   "ProcessUsers": {
-    "_id":{
+    "_":{
       "items": 14
     },
     "firstName": { "regexp": "[A-Z][a-z]{5,10}" },
@@ -28,7 +28,7 @@
   },
 
   "Member": {
-    "_id":{
+    "_":{
       "items": 7
     },
     "firstName": { "regexp": "[A-Z][a-z]{5,10}" },
