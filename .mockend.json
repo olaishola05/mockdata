@@ -10,7 +10,7 @@
     "workspace": { "loremWords": { "minLength": 5, "maxLength": 20 }}
   },
 
-  "ProcessUsers": {
+  "Process": {
     "_":{
       "items": 14
     },
