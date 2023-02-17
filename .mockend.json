@@ -52,18 +52,15 @@
               "Jenbere",
               "Abraraw",
               "Bantrga"
-            ], "string": [
-              "Zeleke",
-              "Abebe",
-              "Jenbere",
-              "Abraraw",
-              "Bantrga"
             ] },
     "createdAt": {
       "dateTime": {
         "min": "2010-01-01T00:00:00Z",
         "max": "2020-12-31T23:59:59Z"
       }
+    },
+    "members": {
+      "hasMany": "Member"
     }
   },
 
@@ -86,6 +83,9 @@
               "Bantrga"
             ] },
     "email": { "regexp": "[a-z]{5,10}@[a-z]{5}\\.[a-z]{2,3}" },
-    "permission": { "string": ["Admin", "Utente", "Venditore", "Solo lettura"] }
+    "permission": { "string": ["Admin", "Utente", "Venditore", "Solo lettura"] },
+    "process": {
+      "belongsTo": "Process"
+    }
   }
 }
