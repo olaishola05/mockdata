@@ -3,14 +3,16 @@
     "_":{
       "items": 3
     },
-    "firstName": { "string": [
+    "firstName": { 
+      "string": [
               "Abel",
               "Betsegaw",
               "Bisrat",
               "MElkamu",
               "Yidne"
              ] },
-    "lastName": { "string": [
+    "lastName": { 
+      "string": [
               "Zeleke",
               "Abebe",
               "Jenbere",
@@ -26,14 +28,16 @@
     "_":{
       "items": 14
     },
-    "firstName": { "string": [
+    "firstName": { 
+      "string": [
               "Abel",
               "Betsegaw",
               "Bisrat",
               "MElkamu",
               "Yidne"
              ] },
-    "lastName": { "string": [
+    "lastName": { 
+      "string": [
               "Zeleke",
               "Abebe",
               "Jenbere",
@@ -54,7 +58,7 @@
               "Jenbere",
               "Abraraw",
               "Bantrga"
-            ] }},
+            ] },
     "createdAt": {
       "dateTime": {
         "min": "2010-01-01T00:00:00Z",
