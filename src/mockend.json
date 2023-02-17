@@ -1,0 +1,39 @@
+{
+  "User": {
+    "_id":{
+      "items": 3
+    },
+    "firstName": { "regexp": "[A-Z][a-z]{5,10}" },
+    "lastName": { "regexp": "[A-Z][a-z]{5,10}" },
+    "email": { "regexp": "[a-z]{5,10}@[a-z]{5}\\.[a-z]{2,3}" },
+    "password": { "regexp": "[A-Z][a-z]{5,10}" },
+    "workspace": { "loremWords": { "minLength": 5, "maxLength": 20 }}
+  },
+
+  "ProcessUsers": {
+    "_id":{
+      "items": 14
+    },
+    "firstName": { "regexp": "[A-Z][a-z]{5,10}" },
+    "lastName": { "regexp": "[A-Z][a-z]{5,10}" },
+    "phone": { "regexp": "[0-9]{3}-[0-9]{3}-[0-9]{4}" },
+    "processId": { "regexp": "[A-Z][A-Z]{5,10}" },
+    "Assignee": { "loremWords": { "minLength": 5, "maxLength": 20 }},
+    "createdAt": {
+      "date": {
+        "min": "2018-01-01",
+        "max": "2018-12-31"
+      }
+    }
+  },
+
+  "Member": {
+    "_id":{
+      "items": 7
+    },
+    "firstName": { "regexp": "[A-Z][a-z]{5,10}" },
+    "lastName": { "regexp": "[A-Z][a-z]{5,10}" },
+    "email": { "regexp": "[a-z]{5,10}@[a-z]{5}\\.[a-z]{2,3}" },
+    "permission": { "string": ["Admin", "Utente", "Venditore", "Solo lettura"] }
+  }
+}
