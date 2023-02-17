@@ -45,7 +45,7 @@
               "Bantrga"
             ] },
     "phone": { "regexp": "[0-9]{3}-[0-9]{3}-[0-9]{4}" },
-    "processId": { "regexp": "[A-Z][A-Z]{5,10}" },
+    "processId": { "regexp": "IT[0-9]{9}" },
     "Assignee": { "string": [
               "Zeleke",
               "Abebe",
