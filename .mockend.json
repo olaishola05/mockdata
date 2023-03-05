@@ -82,7 +82,7 @@
               "Abraraw",
               "Bantrga"
             ] },
-    "email": { "regexp": "[a-z]{5,10}.lastingdynamics.com" },
+    "email": { "regexp": "[a-z]{5,10}@lastingdynamics.com" },
     "permission": { "string": ["Admin", "Utente", "Venditore", "Solo lettura"] },
     "process": {
       "belongsTo": "Process"
