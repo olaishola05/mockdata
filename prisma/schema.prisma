@@ -3,21 +3,27 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
-  id  String @id @default(cuid())
+  id  String @id @default(cuid()) @map("_id")
   firstName String?
   lastName String?
   email String @unique
   password String
   processes Process[]
+  role Role @default(USER)
 }
 
 model Process {
-  id String @id @default(cuid())
+  id String @id @default(cuid()) @map("_id")
   firstName String
   lastName String
   phone String
