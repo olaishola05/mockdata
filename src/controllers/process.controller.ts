@@ -117,4 +117,4 @@ export const deleteProcess = asyncHandler(async (error: any, req: Request, res: 
     });
 
     next(errorResponse(error, req, res, next))
-}
+})

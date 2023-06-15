@@ -8,12 +8,12 @@ import {
 }
   from '../controllers/user.controller';
 
-const router = Router();
+const userRouter = Router();
 
-router.get('/', getAllUsers);
-router.get('/:id', getUserById);
-router.post('/', createUser);
-router.put('/:id', updateUser);
-router.delete('/:id', deleteUser);
+userRouter.get('/', getAllUsers);
+userRouter.get('/:id', getUserById);
+userRouter.post('/', createUser);
+userRouter.put('/:id', updateUser);
+userRouter.delete('/:id', deleteUser);
 
-export default router;
+export default userRouter;

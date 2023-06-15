@@ -7,12 +7,12 @@ import {
   deleteProcess,
 } from '../controllers/process.controller';
 
-const router = Router();
+const processRouter = Router();
 
-router.get('/', getAllProcesses);
-router.get('/:id', getProcessById);
-router.post('/', createProcess);
-router.put('/:id', updateProcess);
-router.delete('/:id', deleteProcess);
+processRouter.get('/', getAllProcesses);
+processRouter.get('/:id', getProcessById);
+processRouter.post('/', createProcess);
+processRouter.put('/:id', updateProcess);
+processRouter.delete('/:id', deleteProcess);
 
-export default router;
+export default processRouter;
