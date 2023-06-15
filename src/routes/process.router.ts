@@ -14,3 +14,5 @@ router.get('/:id', getProcessById);
 router.post('/', createProcess);
 router.put('/:id', updateProcess);
 router.delete('/:id', deleteProcess);
+
+export default router;
