@@ -1,43 +1,47 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { User, PrismaClient } from '@prisma/client';
+import { asyncHandler, NotFoundError } from "utils";
+import { errorResponse } from "middleware";
 
 const userPrismaClient = new PrismaClient();
 
-export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const users: User[] = await userPrismaClient.user.findMany({
-      include: {
-        processes: true,
-      },
-    });
-    res.status(200).json({
-      status: 'success',
-      data: users,
-      nHits: users.length, 
-    });
-  } catch (error) {
-    console.log(error);
-  }
-}
+export const getAllUsers = asyncHandler(
+  async (error: any, req: Request, res: Response, next: NextFunction): Promise<void> => {
+      const users: User[] = await userPrismaClient.user.findMany({
+        include: {
+          processes: true,
+        },
+      });
+      res.status(200).json({
+        status: 'success',
+        message: 'All users',
+        data: users,
+        nHits: users.length, 
+      });
 
-export const getUserById = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const user: User | null = await userPrismaClient.user.findUnique({
-      where: {
-        id: req.params.id,
-      },
-      include: {
-        processes: true,
-      },
-    });
-    res.status(200).json({
-      status: 'success',
-      data: user,
-    });
-  } catch (error) {
-    console.log(error);
+      next(errorResponse(error, req, res, next))
   }
-}
+)
+
+export const getUserById = asyncHandler (async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const user: User | null = await userPrismaClient.user.findUnique({
+    where: {
+      id: req.params.id,
+    },
+    include: {
+      processes: true,
+    },
+  });
+
+  if (!user) {
+    return next(new NotFoundError('user'))
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: user,
+  });
+})
 
 export const createUser = async (req: Request, res: Response): Promise<void> => {
   try {
