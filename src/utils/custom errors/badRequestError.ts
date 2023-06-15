@@ -1,9 +1,9 @@
 import BaseError from "./baseError";
 
-class BadRequest extends BaseError {
+class BadRequestError extends BaseError {
   constructor(message: string) {
     super(message, 400);
   }
 }
 
-export default BadRequest;
+export default BadRequestError;

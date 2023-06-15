@@ -20,6 +20,7 @@ model User {
   password String
   processes Process[]
   role Role @default(USER)
+  workspaces String?
 }
 
 model Process {
