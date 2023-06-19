@@ -1,15 +1,19 @@
 import { Request, Response, NextFunction } from 'express';
 
-const errorResponse = (err: any, req: Request, res: Response, next: NextFunction) => {
-  const customError: boolean = err.constructor.name === 'NodeError' || err.constructor.name === 'SyntaxError' || err.constructor.name === 'TypeError' ? false : true;
+const errorResponse = (req: Request, res: Response, next: NextFunction, err: any) => {
+  const customErrors = ['NodeError', 'SyntaxError', 'TypeError'];
+  const isCustomError = err && !customErrors.includes(err.constructor.name);
 
-  res.status(err.statusCode || 500).json({
+  const statusCode = err && err.statusCode || 500;
+  const message = err && err.message || 'Internal Server Error';
+
+  res.status(statusCode).json({
     response: 'Error',
     error: {
-      type: customError === false ? "UnhandledError" : err.constructor.name,
+      type: isCustomError ? err.constructor.name : 'UnhandledError',
       path: req.path,
-      statusCode: err.statusCode || 500,
-      message: err.message || 'Internal Server Error',
+      statusCode,
+      message,
     }
   });
 

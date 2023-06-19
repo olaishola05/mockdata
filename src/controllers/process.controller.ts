@@ -17,7 +17,7 @@ const checkProcessExist = async (processId: string): Promise<Process | null> => 
   return process;
 }
 
-export const getAllProcesses = asyncHandler(async (error: any, req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const getAllProcesses = asyncHandler(async (req: Request, res: Response, next: NextFunction, error: any): Promise<void> => {
   const processes: Process[] = await processPrismaClient.process.findMany({});
     res.status(200).json({
       status: 'success',
@@ -26,10 +26,10 @@ export const getAllProcesses = asyncHandler(async (error: any, req: Request, res
       nHits: processes.length, 
     });
 
-    next(errorResponse(error, req, res, next))
+    next(errorResponse(req, res, next, error))
 })
 
-export const getProcessById = asyncHandler(async (error: any, req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const getProcessById = asyncHandler(async (req: Request, res: Response, next: NextFunction, error: any): Promise<void> => {
   const processId = req.params.id;
     const process = await checkProcessExist(processId);
     if (!process) {
@@ -42,10 +42,10 @@ export const getProcessById = asyncHandler(async (error: any, req: Request, res:
       data: process,
     });
 
-    next(errorResponse(error, req, res, next))
+    next(errorResponse(req, res, next, error))
 })
 
-export const createProcess = asyncHandler(async (error: any, req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const createProcess = asyncHandler(async (req: Request, res: Response, next: NextFunction, error: any): Promise<void> => {
   const processData: Process = req.body;
 
   const { firstName, lastName, phone, assigneeId } = processData;
@@ -68,10 +68,10 @@ export const createProcess = asyncHandler(async (error: any, req: Request, res: 
       data: process,
     });
 
-    next(errorResponse(error, req, res, next))
+    next(errorResponse(req, res, next, error))
 })
 
-export const updateProcess = asyncHandler(async (error: any, req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const updateProcess = asyncHandler(async (req: Request, res: Response, next: NextFunction, error: any): Promise<void> => {
   const processId = req.params.id;
   const checkProcess = await checkProcessExist(processId);
 
@@ -94,10 +94,10 @@ export const updateProcess = asyncHandler(async (error: any, req: Request, res: 
       data: process,
     });
 
-    next(errorResponse(error, req, res, next))
+    next(errorResponse(req, res, next, error))
 });
 
-export const deleteProcess = asyncHandler(async (error: any, req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const deleteProcess = asyncHandler(async (req: Request, res: Response, next: NextFunction, error: any): Promise<void> => {
   const processId = req.params.id;
   const checkProcess = await checkProcessExist(processId);
 
@@ -116,5 +116,5 @@ export const deleteProcess = asyncHandler(async (error: any, req: Request, res: 
       data: process,
     });
 
-    next(errorResponse(error, req, res, next))
+    next(errorResponse(req, res, next, error))
 })

@@ -15,43 +15,59 @@ const checkUserExist = async (userId: string): Promise<User | null> => {
 }
 
 export const getAllUsers = asyncHandler(
-  async (error: any, req: Request, res: Response, next: NextFunction): Promise<void> => {
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+
     const users: User[] = await userPrismaClient.user.findMany({
       include: {
         processes: true,
       },
     });
+
+    if (!users) {
+      return next(new NotFoundError('users'))
+    }
+
     res.status(200).json({
       status: 'success',
       message: 'All users',
       data: users,
       nHits: users.length,
     });
-
-    next(errorResponse(error, req, res, next))
   }
 )
 
 export const getUserById = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const user: User | null = await userPrismaClient.user.findUnique({
-    where: {
-      id: req.params.id,
-    },
-  });
+  const user = await checkUserExist(req.params.id);
 
   if (!user) {
-    return next(new NotFoundError('user'))
+    res.status(404).json({
+      status: 'error',
+      message: 'User not found',
+      statusCode: 404,
+    });
+    next(new NotFoundError('user'))
   }
 
   res.status(200).json({
     status: 'success',
     data: user,
   });
+
 })
 
-export const createUser = asyncHandler(async (error: any, req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const createUser = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const userData: User = req.body;
   const { firstName, lastName, email, password } = userData;
+
+  const emailExist = await userPrismaClient.user.findUnique({
+    where: {
+      email: email,
+    },
+  });
+
+  if (emailExist) {
+    return next(new BadRequestError('Email already exist'))
+  }
 
   if (!firstName || !lastName || !email || !password) {
     return next(new BadRequestError('Please provide all required fields'))
@@ -63,11 +79,9 @@ export const createUser = asyncHandler(async (error: any, req: Request, res: Res
     status: 'success',
     data: user,
   });
-
-  next(errorResponse(error, req, res, next))
 })
 
-export const updateUser = asyncHandler(async (error: any, req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const updateUser = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const userId = req.params.id;
   const checkUser = await checkUserExist(userId);
 
@@ -85,11 +99,9 @@ export const updateUser = asyncHandler(async (error: any, req: Request, res: Res
     status: 'success',
     data: updatedUser,
   });
-
-  next(errorResponse(error, req, res, next))
 })
 
-export const deleteUser = asyncHandler(async (error: any, req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const deleteUser = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const userId = req.params.id;
   const checkUser = await checkUserExist(userId);
 
@@ -106,6 +118,4 @@ export const deleteUser = asyncHandler(async (error: any, req: Request, res: Res
     status: 'success',
     data: deletedUser,
   });
-
-  next(errorResponse(error, req, res, next))
 })
