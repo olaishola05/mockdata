@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { User, PrismaClient } from '@prisma/client';
-import { asyncHandler, NotFoundError, BadRequestError } from "../utils";
+import { asyncHandler, NotFoundError } from "../utils";
 
 const userPrismaClient = new PrismaClient();
 
@@ -15,7 +15,6 @@ const checkUserExist = async (userId: string): Promise<User | null> => {
 
 export const getAllUsers = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-
     const users: User[] = await userPrismaClient.user.findMany({
       include: {
         processes: true,
@@ -52,32 +51,6 @@ export const getUserById = asyncHandler(async (req: Request, res: Response, next
     data: user,
   });
 
-})
-
-export const createUser = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const userData: User = req.body;
-  const { firstName, lastName, email, password } = userData;
-
-  const emailExist = await userPrismaClient.user.findUnique({
-    where: {
-      email: email,
-    },
-  });
-
-  if (emailExist) {
-    return next(new BadRequestError('Email already exist'))
-  }
-
-  if (!firstName || !lastName || !email || !password) {
-    return next(new BadRequestError('Please provide all required fields'))
-  }
-  const user: User = await userPrismaClient.user.create({
-    data: { ...userData }
-  });
-  res.status(201).json({
-    status: 'success',
-    data: user,
-  });
 })
 
 export const updateUser = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {

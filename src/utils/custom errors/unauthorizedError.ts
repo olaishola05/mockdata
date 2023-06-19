@@ -1,6 +1,6 @@
 import BaseError from "./baseError";
 
-class UnAuthorized extends BaseError {
+class UnauthorizedError extends BaseError {
   userName: string;
   constructor(userName: string) {
     super(`Dear ${userName}! You are not authorized to access this resource.`, 401);
@@ -8,4 +8,4 @@ class UnAuthorized extends BaseError {
   }
 }
 
-export default UnAuthorized;
+export default UnauthorizedError;

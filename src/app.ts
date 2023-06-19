@@ -1,13 +1,15 @@
 import express from 'express';
 import { Request, Response, NextFunction } from 'express';
-import { userRouter, processRouter } from './routes';
+import { userRouter, processRouter, authRouter } from './routes';
 import { errorResponse, errorLogging } from './middleware';
+import * as cors from "cors";
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors.default());
 
 app.get('/', (req, res) => {
   res.status(200).json({
@@ -16,6 +18,8 @@ app.get('/', (req, res) => {
   });
 });
 
+
+app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/processes', processRouter);
 

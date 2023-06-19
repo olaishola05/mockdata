@@ -21,6 +21,7 @@ model User {
   processes Process[]
   role Role @default(USER)
   workspaces String?
+  token String?
 }
 
 model Process {
