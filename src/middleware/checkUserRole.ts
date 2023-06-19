@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { UnauthorizedError, ForbiddenError } from './utils'
+import { UnauthorizedError, ForbiddenError } from '../utils'
 import { User, PrismaClient } from '@prisma/client';
 
 
@@ -14,7 +14,7 @@ export const checkUserRole = (roles: string[]) => {
         });
 
         if (!user) {
-            return next(new UnauthorizedError('User not found'));
+            return next(new UnauthorizedError(user.firstName));
         }
 
         if (!roles.includes(user.role)) {

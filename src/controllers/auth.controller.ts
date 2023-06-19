@@ -8,7 +8,7 @@ const authPrismaClient = new PrismaClient();
 export const createUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const userData: User = req.body;
-    const { firstName, lastName, email, password } = userData;
+    const { firstName, lastName, email, password, passwordConfirmation } = userData;
 
     const emailExist = await authPrismaClient.user.findUnique({
       where: {
@@ -26,11 +26,17 @@ export const createUser = asyncHandler(
 
     const salt = await bycrypt.genSalt(10);
     const hashedPassword = await bycrypt.hash(password, salt);
+    const hashedPasswordConfirmation = await bycrypt.hash(passwordConfirmation, salt);
+
+    if (hashedPassword !== hashedPasswordConfirmation) {
+        return next(new BadRequestError("Passwords do not match"));
+    }
 
     const user: User = await authPrismaClient.user.create({
       data: { ...userData, 
         email: email.toLowerCase(),
         password: hashedPassword,
+        passwordConfirmation: hashedPasswordConfirmation,
     }
     });
 
