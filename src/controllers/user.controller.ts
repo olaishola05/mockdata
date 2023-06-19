@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { User, PrismaClient } from '@prisma/client';
 import { asyncHandler, NotFoundError, BadRequestError } from "../utils";
-import { errorResponse } from "../middleware";
 
 const userPrismaClient = new PrismaClient();
 
