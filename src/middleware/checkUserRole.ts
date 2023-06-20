@@ -9,12 +9,12 @@ export const checkUserRole = (roles: string[]) => {
         const userPrismaClient = new PrismaClient();
         const user: User | null = await userPrismaClient.user.findUnique({
             where: {
-                id: req.user.id,
+                id: res.locals.jwtPayload.userId,
             },
         });
 
         if (!user) {
-            return next(new UnauthorizedError(user.firstName));
+            return next(new UnauthorizedError('user'));
         }
 
         if (!roles.includes(user.role)) {

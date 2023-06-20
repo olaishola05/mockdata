@@ -20,7 +20,7 @@ export const createUser = asyncHandler(
       return next(new BadRequestError("Email or user already exist"));
     }
 
-    if (!firstName || !lastName || !email || !password) {
+    if (!firstName || !lastName || !email || !password || !passwordConfirmation) {
       return next(new BadRequestError("Please provide all required fields"));
     }
 
@@ -29,7 +29,7 @@ export const createUser = asyncHandler(
     const hashedPasswordConfirmation = await bycrypt.hash(passwordConfirmation, salt);
 
     if (hashedPassword !== hashedPasswordConfirmation) {
-        return next(new BadRequestError("Passwords do not match"));
+        return next(new BadRequestError("Passwords does not match"));
     }
 
     const user: User = await authPrismaClient.user.create({
@@ -78,7 +78,7 @@ export const loginUser = asyncHandler(
         res.status(200).json({
             status: "success",
             message: "User logged in successfully",
-            data: user.token,
+            token: user.token,
         });
     }
 );
