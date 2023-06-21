@@ -50,9 +50,9 @@ export const getProcessById = asyncHandler(async (req: Request, res: Response, n
 export const createProcess = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const processData: Process = req.body;
 
-  const { firstName, lastName, phone, assigneeId } = processData;
+  const { firstName, lastName, phone, assigneeId, processId } = processData;
 
-  if (!firstName || !lastName || !phone || !assigneeId) {
+  if (!firstName || !lastName || !phone || !assigneeId || !processId) {
     return next(new BadRequestError('Please provide all required fields'))
   }
   
@@ -62,6 +62,8 @@ export const createProcess = asyncHandler(async (req: Request, res: Response, ne
         lastName: processData.lastName,
         phone: processData.phone,
         assignee: {connect: {id: processData.assigneeId}},
+        processId: processData.processId,
+
       }
     });
     res.status(201).json({

@@ -7,7 +7,7 @@ const authPrismaClient = new PrismaClient();
 
 export const createUser = asyncHandler(
   async (req: Request<{}, {}, createUserSchemaType["body"]>, res: Response, next: NextFunction): Promise<void> => {
-    const userData: = req.body;
+    const userData   = req.body;
     const { firstName, lastName, email, password, confirmPassword } = userData;
 
     const emailExist = await authPrismaClient.user.findUnique({

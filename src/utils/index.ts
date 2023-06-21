@@ -5,6 +5,10 @@ import UnauthorizedError from "./custom errors/unauthorizedError";
 import { jwtTokenGenerator, jwtTokenVerifier } from "./jwtTokenGenerator";
 import ForbiddenError from "./custom errors/forbiddenError";
 import {
+  createUserSchema,
+  loginSchema,
+  passwordResetSchema,
+  passwordResetTokenSchema,
   loginSchemaType,
   passwordResetTokenSchemaType,
   passwordResetSchemaType,
@@ -12,6 +16,9 @@ import {
 } from './schema validation/userSchema'
 
 import {
+  processSchema,
+  processUpdateSchema,
+  processDeleteSchema,
   ProcessSchemaType,
   ProcessUpdateSchemaType,
   ProcessDeleteSchemaType,
@@ -19,11 +26,17 @@ import {
 } from "./schema validation/processSchema";
 
 export { 
-    asyncHandler, NotFoundError, BadRequestError, jwtTokenGenerator, jwtTokenVerifier, UnauthorizedError, ForbiddenError,
+    asyncHandler, NotFoundError, BadRequestError, jwtTokenGenerator, jwtTokenVerifier, UnauthorizedError, ForbiddenError, createUserSchema,
+    loginSchema,
+    passwordResetSchema,
+    passwordResetTokenSchema,
     loginSchemaType,
     passwordResetTokenSchemaType,
     passwordResetSchemaType,
     createUserSchemaType,
+    processSchema,
+    processUpdateSchema,
+    processDeleteSchema,
     ProcessSchemaType,
     ProcessUpdateSchemaType,
     ProcessDeleteSchemaType,
