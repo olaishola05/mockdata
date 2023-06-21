@@ -1,24 +1,29 @@
 import { Request, Response, NextFunction } from 'express';
-import { jwtTokenVerifier } from '../utils';
+import { jwtTokenVerifier, UnauthorizedError } from '../utils';
+import { JwtPayload } from 'jsonwebtoken';
 
-const authenticate = (req: Request, res: Response, next: NextFunction): void => {
-  const token = <string>req.header("Authorization");
+interface CustomRequest extends Request {
+  user?: any;
+}
+
+const authenticate = (req: CustomRequest, res: Response, next: NextFunction): void => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
 
   if (!token) {
-    res.status(401).json({ message: 'Access denied. No token provided.' });
+    // res.status(401).json({ message: 'Access denied. No token provided.' });
+    next(new UnauthorizedError('user'));
+    return;
   }
 
-  let decoded: any;
+  let decoded: string | JwtPayload;
 
   try {
     decoded = jwtTokenVerifier(token);
-    // req.user = decoded;
-    // res.locals.jwtPayload = decoded;
-    console.log(decoded);
+    req.user = decoded;
+
     next();
   } catch (err) {
     res.status(401).json({ message: 'Invalid token.' });
-    return;
   }
 };
 
