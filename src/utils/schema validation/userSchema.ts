@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const createUserSchema = z.object({
     body: z.object({
-        firsName: z
+        firstName: z
             .string()
             .min(3, { message: "First name must be at least 3 characters" })
             .max(100),
@@ -22,8 +22,11 @@ export const createUserSchema = z.object({
             .string()
             .min(6, { message: "Password must be at least 6 characters" })
             .max(100),
-        role: z.enum(["user", "admin"]).optional(),
-        workspace: z.string().optional(),
+        role: z.enum(["USER", "ADMIN"]),
+        workspaces: z.string().optional(),
+        token: z.string().optional(),
+        isVerified: z.boolean().optional(), 
+        
     }).refine((data) => data.password === data.confirmPassword, {
         message: "Passwords do not match",
         path: ["confirmPassword"],

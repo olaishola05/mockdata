@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 const bycrypt = require("bcrypt");
 import { User, PrismaClient } from "@prisma/client";
-import { asyncHandler, BadRequestError, jwtTokenGenerator } from "../utils";
+import { asyncHandler, BadRequestError, jwtTokenGenerator, createUserSchemaType, loginSchemaType } from "../utils";
 
 const authPrismaClient = new PrismaClient();
 
 export const createUser = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const userData: User = req.body;
-    const { firstName, lastName, email, password, passwordConfirmation } = userData;
+  async (req: Request<{}, {}, createUserSchemaType["body"]>, res: Response, next: NextFunction): Promise<void> => {
+    const userData: = req.body;
+    const { firstName, lastName, email, password, confirmPassword } = userData;
 
     const emailExist = await authPrismaClient.user.findUnique({
       where: {
@@ -20,13 +20,16 @@ export const createUser = asyncHandler(
       return next(new BadRequestError("Email or user already exist"));
     }
 
-    if (!firstName || !lastName || !email || !password || !passwordConfirmation) {
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
       return next(new BadRequestError("Please provide all required fields"));
     }
 
     const salt = await bycrypt.genSalt(10);
     const hashedPassword = await bycrypt.hash(password, salt);
-    const hashedPasswordConfirmation = await bycrypt.hash(passwordConfirmation, salt);
+    const hashedPasswordConfirmation = await bycrypt.hash(
+      confirmPassword,
+      salt
+    );
 
     if (hashedPassword !== hashedPasswordConfirmation) {
         return next(new BadRequestError("Passwords does not match"));
@@ -36,7 +39,7 @@ export const createUser = asyncHandler(
       data: { ...userData, 
         email: email.toLowerCase(),
         password: hashedPassword,
-        passwordConfirmation: hashedPasswordConfirmation,
+        confirmPassword: hashedPasswordConfirmation,
     }
     });
 
@@ -49,7 +52,7 @@ export const createUser = asyncHandler(
 );
 
 export const loginUser = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    async (req: Request<{}, {}, loginSchemaType["body"]>, res: Response, next: NextFunction): Promise<void> => {
         const { email, password } = req.body;
 
         if (!email || !password) {
