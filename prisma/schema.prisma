@@ -23,6 +23,7 @@ model User {
   role Role @default(USER)
   workspaces String?
   token String?
+  isVerified Boolean @default(false)
 }
 
 model Process {
@@ -30,6 +31,7 @@ model Process {
   firstName String
   lastName String
   phone String
+  processId String
   assignee User @relation(fields: [assigneeId], references: [id])
   assigneeId String
   createdAt DateTime @default(now())

@@ -8,10 +8,12 @@ const authenticate = (req: Request, res: Response, next: NextFunction): void => 
     res.status(401).json({ message: 'Access denied. No token provided.' });
   }
 
+  let decoded: any;
+
   try {
-    const decoded = jwtTokenVerifier(token);
+    decoded = jwtTokenVerifier(token);
     // req.user = decoded;
-    res.locals.jwtPayload = decoded;
+    // res.locals.jwtPayload = decoded;
     console.log(decoded);
     next();
   } catch (err) {
