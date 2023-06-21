@@ -14,11 +14,6 @@ const reqBodyValidator = (schema: AnyZodObject) =>
       next();
     } catch (error: any) {
       next(new BadRequestError(error.message));
-      // res.status(400).json({
-      //     status: "error",
-      //     message: error.message,
-      //     statusCode: 400,
-      // });
     }
 };
 

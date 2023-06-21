@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 const bycrypt = require("bcrypt");
 import { User, PrismaClient } from "@prisma/client";
-import { asyncHandler, BadRequestError, jwtTokenGenerator, createUserSchemaType, loginSchemaType } from "../utils";
+import { asyncHandler, BadRequestError, NotFoundError, jwtTokenGenerator, createUserSchemaType, loginSchemaType } from "../utils";
 
 const authPrismaClient = new PrismaClient();
 
@@ -66,7 +66,7 @@ export const loginUser = asyncHandler(
         });
 
         if (!user) {
-            return next(new BadRequestError("Invalid email or password"));
+            return next(new NotFoundError("user"));
         }
 
         const validPassword = await bycrypt.compare(password, user.password);
