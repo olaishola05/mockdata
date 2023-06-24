@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { User, PrismaClient } from '@prisma/client';
-import { asyncHandler, NotFoundError } from "../utils";
+import { asyncHandler, ForbiddenError, NotFoundError } from "../utils";
 
 const userPrismaClient = new PrismaClient();
 
@@ -60,6 +60,11 @@ export const updateUser = asyncHandler(async (req: Request, res: Response, next:
   if (!checkUser) {
     return next(new NotFoundError('user'))
   }
+
+  if(checkUser?.id !== res.locals.jwtPayload?.id) {
+    return next(new ForbiddenError())
+  }
+  
   const userData: User = req.body;
   const updatedUser: User = await userPrismaClient.user.update({
     where: {

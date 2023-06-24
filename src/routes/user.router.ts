@@ -6,11 +6,11 @@ import {
   deleteUser,
 }
   from '../controllers/user.controller';
-import { authenticate } from '../middleware';
+import { authenticate, checkUserRole } from '../middleware';
 
 const userRouter = Router();
 
-userRouter.get('/', authenticate, getAllUsers);
+userRouter.get("/", [authenticate, checkUserRole("USER")], getAllUsers);
 userRouter.get('/:id', getUserById);
 userRouter.put('/:id', updateUser);
 userRouter.delete('/:id', deleteUser);

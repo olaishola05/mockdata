@@ -82,6 +82,7 @@ export const loginUser = asyncHandler(
             status: "success",
             message: "User logged in successfully",
             token: user.token,
+            role: user.role,
         });
     }
 );
