@@ -10,7 +10,7 @@ import { authenticate, checkUserRole } from '../middleware';
 
 const userRouter = Router();
 
-userRouter.get("/", [authenticate, checkUserRole("USER")], getAllUsers);
+userRouter.get("/", [authenticate, checkUserRole("ADMIN")], getAllUsers);
 userRouter.get('/:id', getUserById);
 userRouter.put('/:id', updateUser);
 userRouter.delete('/:id', deleteUser);

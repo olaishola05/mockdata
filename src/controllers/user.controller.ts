@@ -61,7 +61,7 @@ export const updateUser = asyncHandler(async (req: Request, res: Response, next:
     return next(new NotFoundError('user'))
   }
 
-  if(checkUser?.id !== res.locals.jwtPayload?.id) {
+  if(checkUser?.id !== res.locals.jwtPayload?.userId) {
     return next(new ForbiddenError())
   }
   

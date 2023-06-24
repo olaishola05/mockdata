@@ -75,7 +75,7 @@ export const loginUser = asyncHandler(
             return next(new BadRequestError("Invalid password"));
         }
 
-        const token = jwtTokenGenerator(user);
+        const token = jwtTokenGenerator(user);        
         user.token = token;
 
         res.status(200).json({

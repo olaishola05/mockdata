@@ -19,7 +19,6 @@ const authenticate = (req: CustomRequest, res: Response, next: NextFunction): vo
 
   try {
     decoded = jwtTokenVerifier(token);
-    console.log(decoded, req.user)
     res.locals.jwtPayload = decoded;
     req.user = decoded;
 
