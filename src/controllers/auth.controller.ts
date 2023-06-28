@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 const bycrypt = require("bcrypt");
 import { User, PrismaClient } from "@prisma/client";
 import { asyncHandler, BadRequestError, NotFoundError, jwtTokenGenerator, createUserSchemaType, loginSchemaType } from "../utils";
+import { authUser } from "types";
 
 const authPrismaClient = new PrismaClient();
 
@@ -78,11 +79,17 @@ export const loginUser = asyncHandler(
         const token = jwtTokenGenerator(user);        
         user.token = token;
 
+        const {firstName, lastName, role, token: _token} = user as authUser;
+
         res.status(200).json({
             status: "success",
             message: "User logged in successfully",
-            token: user.token,
-            role: user.role,
+            data: {
+                firstName,
+                lastName,
+                role,
+                token: _token,
+            }
         });
     }
 );

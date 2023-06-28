@@ -2,6 +2,14 @@ import { Request, Response, NextFunction } from "express";
 import { User, PrismaClient } from '@prisma/client';
 import { asyncHandler, ForbiddenError, NotFoundError } from "../utils";
 
+interface RequestWithUser extends Request {
+  user?: {
+    id: string;
+    role: string;
+    // add any other properties you need here
+  };
+}
+
 const userPrismaClient = new PrismaClient();
 
 const checkUserExist = async (userId: string): Promise<User | null> => {
@@ -48,12 +56,19 @@ export const getUserById = asyncHandler(async (req: Request, res: Response, next
 
   res.status(200).json({
     status: 'success',
-    data: user,
+    data: {
+      id: user?.id,
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      email: user?.email,
+      role: user?.role,
+      workspaces: user?.workspaces,
+    },
   });
 
 })
 
-export const updateUser = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const updateUser = asyncHandler(async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
   const userId = req.params.id;
   const checkUser = await checkUserExist(userId);
 
@@ -61,7 +76,9 @@ export const updateUser = asyncHandler(async (req: Request, res: Response, next:
     return next(new NotFoundError('user'))
   }
 
-  if(checkUser?.id !== res.locals.jwtPayload?.userId) {
+  console.log(checkUser?.id, req.user?.id)
+
+  if(checkUser?.id !== req.user?.id) {
     return next(new ForbiddenError())
   }
   
@@ -74,6 +91,7 @@ export const updateUser = asyncHandler(async (req: Request, res: Response, next:
   });
   res.status(200).json({
     status: 'success',
+    message: `User with id ${userId} updated successfully`,
     data: updatedUser,
   });
 })
