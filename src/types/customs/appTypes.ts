@@ -4,4 +4,4 @@ export type authUser = {
   lastName: string;
   token: string;
   role: string;
-}
+};

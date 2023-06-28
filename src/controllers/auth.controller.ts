@@ -47,7 +47,6 @@ export const createUser = asyncHandler(
     res.status(201).json({
       status: "success",
       message: "User created successfully",
-      data: user,
     });
   }
 );

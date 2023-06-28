@@ -4,7 +4,7 @@ import { User } from '@prisma/client';
 
 export const jwtTokenGenerator = (payload: User) => {
     return jwt.sign({
-        userId: payload.id, email: payload.email
+        id: payload.id, email: payload.email
     }, process.env.JWT_SECRET_KEY!, { expiresIn: '1h' });
 }
 

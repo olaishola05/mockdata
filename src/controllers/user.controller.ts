@@ -2,13 +2,13 @@ import { Request, Response, NextFunction } from "express";
 import { User, PrismaClient } from '@prisma/client';
 import { asyncHandler, ForbiddenError, NotFoundError } from "../utils";
 
-interface RequestWithUser extends Request {
-  user?: {
-    id: string;
-    role: string;
-    // add any other properties you need here
-  };
-}
+// interface RequestWithUser extends Request {
+//   user?: {
+//     id: string;
+//     role: string;
+//     // add any other properties you need here
+//   };
+// }
 
 const userPrismaClient = new PrismaClient();
 
@@ -68,17 +68,17 @@ export const getUserById = asyncHandler(async (req: Request, res: Response, next
 
 })
 
-export const updateUser = asyncHandler(async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+export const updateUser = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const userId = req.params.id;
   const checkUser = await checkUserExist(userId);
-
+  console.log(req.user, 'req user')
+  
   if (!checkUser) {
     return next(new NotFoundError('user'))
   }
-
-  console.log(checkUser?.id, req.user?.id)
-
-  if(checkUser?.id !== req.user?.id) {
+  
+  
+  if(checkUser?.id !== req.user?.id || req.user?.role === 'ADMIN') {
     return next(new ForbiddenError())
   }
   

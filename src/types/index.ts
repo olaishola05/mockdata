@@ -1,4 +1,4 @@
-import { authUser } from "./customs.ts/appTypes";
+import { authUser } from "./customs/appTypes";
 
 
 
