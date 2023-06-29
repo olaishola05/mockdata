@@ -78,7 +78,7 @@ export const updateUser = asyncHandler(async (req: Request, res: Response, next:
   }
   
   
-  if(checkUser?.id !== req.user?.id || req.user?.role === 'ADMIN') {
+  if(checkUser?.id !== req.user?.id) {
     return next(new ForbiddenError())
   }
   
@@ -102,6 +102,10 @@ export const deleteUser = asyncHandler(async (req: Request, res: Response, next:
 
   if (!checkUser) {
     return next(new NotFoundError('user'))
+  }
+
+  if(req.user?.role !== 'ADMIN') {
+    return next(new ForbiddenError("You don't have permission to delete this user"))
   }
 
   const deletedUser: User = await userPrismaClient.user.delete({

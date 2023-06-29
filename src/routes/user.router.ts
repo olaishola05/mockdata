@@ -12,7 +12,7 @@ const userRouter = Router();
 
 userRouter.get("/", [authenticate, checkUserRole(["ADMIN"])], getAllUsers);
 userRouter.get('/:id', authenticate, getUserById);
-userRouter.put('/:id', authenticate, updateUser);
-userRouter.delete("/:id", [authenticate, checkUserRole(["ADMIN"])], deleteUser);
+userRouter.put('/:id', authenticate, checkUserRole(["ADMIN", "USER"]), updateUser);
+userRouter.delete("/:id", [authenticate, checkUserRole(["ADMIN", "USER"])], deleteUser);
 
 export default userRouter;
