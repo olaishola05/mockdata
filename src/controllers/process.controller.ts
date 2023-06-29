@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import {Process, PrismaClient, Role } from '@prisma/client';
-import { BadRequestError, ForbiddenError, NotFoundError, asyncHandler } from '../utils';
+import { BadRequestError, ForbiddenError, NotFoundError, ProcessSchemaType, asyncHandler } from '../utils';
 
 const processPrismaClient = new PrismaClient();
 
@@ -47,7 +47,7 @@ export const getProcessById = asyncHandler(async (req: Request, res: Response, n
     });
 })
 
-export const createProcess = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const createProcess = asyncHandler(async (req: Request<{}, {}, ProcessSchemaType["body"]>, res: Response, next: NextFunction): Promise<void> => {
   const processData: Process = req.body;
   const user = req.user;
 
