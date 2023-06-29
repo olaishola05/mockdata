@@ -2,14 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { User, PrismaClient } from '@prisma/client';
 import { asyncHandler, ForbiddenError, NotFoundError } from "../utils";
 
-// interface RequestWithUser extends Request {
-//   user?: {
-//     id: string;
-//     role: string;
-//     // add any other properties you need here
-//   };
-// }
-
 const userPrismaClient = new PrismaClient();
 
 const checkUserExist = async (userId: string): Promise<User | null> => {
@@ -87,7 +79,10 @@ export const updateUser = asyncHandler(async (req: Request, res: Response, next:
     where: {
       id: userId,
     },
-    data: { ...userData },
+    data: { 
+      ...userData,
+      updatedAt: new Date(), 
+    },
   });
   res.status(200).json({
     status: 'success',

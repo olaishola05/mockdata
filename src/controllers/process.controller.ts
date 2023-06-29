@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import {Process, PrismaClient } from '@prisma/client';
-import { BadRequestError, NotFoundError, asyncHandler } from '../utils';
+import {Process, PrismaClient, Role } from '@prisma/client';
+import { BadRequestError, ForbiddenError, NotFoundError, asyncHandler } from '../utils';
 
 const processPrismaClient = new PrismaClient();
 
@@ -49,11 +49,16 @@ export const getProcessById = asyncHandler(async (req: Request, res: Response, n
 
 export const createProcess = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const processData: Process = req.body;
+  const user = req.user;
 
-  const { firstName, lastName, phone, assigneeId, processId } = processData;
+  const { firstName, lastName, phone, assigneeId } = processData;
 
-  if (!firstName || !lastName || !phone || !assigneeId || !processId) {
+  if (!firstName || !lastName || !phone || !assigneeId) {
     return next(new BadRequestError('Please provide all required fields'))
+  }
+
+  if (user?.role !== 'ADMIN' && user?.role !== 'TEAM_LEAD' && user?.role !== 'TASK_MANAGER') {
+    return next( new ForbiddenError("You don't have permission to perform this action"));
   }
   
   const process: Process = await processPrismaClient.process.create({
@@ -62,8 +67,6 @@ export const createProcess = asyncHandler(async (req: Request, res: Response, ne
         lastName: processData.lastName,
         phone: processData.phone,
         assignee: {connect: {id: processData.assigneeId}},
-        processId: processData.processId,
-
       }
     });
     res.status(201).json({
@@ -76,9 +79,14 @@ export const createProcess = asyncHandler(async (req: Request, res: Response, ne
 export const updateProcess = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const processId = req.params.id;
   const checkProcess = await checkProcessExist(processId);
+  const user = req.user;
 
   if (!checkProcess) {
     return next(new NotFoundError('process'))
+  }
+
+  if (user?.role !== 'ADMIN' && user?.role !== 'TEAM_LEAD' && user?.role !== 'TASK_MANAGER') {
+    return next( new ForbiddenError("You don't have permission to perform this action"));
   }
   
   const processData: Process = req.body;
@@ -93,16 +101,24 @@ export const updateProcess = asyncHandler(async (req: Request, res: Response, ne
     res.status(201).json({
       status: 'success',
       message: 'Process updated successfully',
-      data: process,
+      data: {
+        ...process,
+        updatedAt: new Date(),
+      },
     });
 });
 
 export const deleteProcess = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const processId = req.params.id;
   const checkProcess = await checkProcessExist(processId);
+  const user = req.user;
 
   if (!checkProcess) {
     return next(new NotFoundError('process'))
+  }
+
+  if(user?.role !== 'ADMIN') {
+    return next( new ForbiddenError("You don't have permission to perform this action"));
   }
   
   const process: Process = await processPrismaClient.process.delete({

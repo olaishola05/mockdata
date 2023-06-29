@@ -10,6 +10,8 @@ datasource db {
 enum Role {
   USER
   ADMIN
+  TASK_MANAGER
+  TEAM_LEAD
 }
 
 model User {
@@ -24,6 +26,8 @@ model User {
   workspaces String?
   token String?
   isVerified Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Process {
@@ -31,8 +35,8 @@ model Process {
   firstName String
   lastName String
   phone String
-  processId String
   assignee User @relation(fields: [assigneeId], references: [id])
   assigneeId String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
