@@ -2,9 +2,6 @@ import { z } from "zod";
 
 export const processSchema = z.object({
     body: z.object({
-        id: z
-            .string(),
-            // .optional(),
         firstName: z
             .string()
             .min(3, { message: "Full name must be at least 3 characters" })
@@ -17,19 +14,6 @@ export const processSchema = z.object({
             .string()
             .min(3, { message: "Phone must be at least 3 characters" })
             .max(16),
-        assignee: z
-            .string()
-            .min(3, { message: "Assigned ID must be at least 3 characters" })
-            .max(100),
-            
-        assigneeId: z
-            .string()
-            .min(3, { message: "Assigned ID must be at least 3 characters" })
-            .max(100),
-        createdAt: z
-            .date(),
-        updatedAt: z
-            .date(),
     }),
 })
 

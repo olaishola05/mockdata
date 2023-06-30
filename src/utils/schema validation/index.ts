@@ -13,11 +13,8 @@ import {
 import {
   processSchema,
   processUpdateSchema,
-  processDeleteSchema,
   ProcessSchemaType,
   ProcessUpdateSchemaType,
-  ProcessDeleteSchemaType,
-  ProcessGetSchemaType,
 } from "./processSchema";
 
 
@@ -32,9 +29,6 @@ export {
     createUserSchemaType,
     processSchema,
     processUpdateSchema,
-    processDeleteSchema,
     ProcessSchemaType,
     ProcessUpdateSchemaType,
-    ProcessDeleteSchemaType,
-    ProcessGetSchemaType,
 };

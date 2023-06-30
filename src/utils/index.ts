@@ -18,11 +18,8 @@ import {
 import {
   processSchema,
   processUpdateSchema,
-  processDeleteSchema,
   ProcessSchemaType,
   ProcessUpdateSchemaType,
-  ProcessDeleteSchemaType,
-  ProcessGetSchemaType,
 } from "./schema validation/processSchema";
 
 export { 
@@ -36,9 +33,6 @@ export {
     createUserSchemaType,
     processSchema,
     processUpdateSchema,
-    processDeleteSchema,
     ProcessSchemaType,
     ProcessUpdateSchemaType,
-    ProcessDeleteSchemaType,
-    ProcessGetSchemaType,
 }

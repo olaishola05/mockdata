@@ -3,6 +3,7 @@ import {Process, PrismaClient, Role } from '@prisma/client';
 import { BadRequestError, ForbiddenError, NotFoundError, ProcessSchemaType, asyncHandler } from '../utils';
 
 const processPrismaClient = new PrismaClient();
+const userPrismaClient = new PrismaClient();
 
 const checkProcessExist = async (processId: string): Promise<Process | null> => {
   const process: Process | null = await processPrismaClient.process.findUnique({
@@ -14,6 +15,11 @@ const checkProcessExist = async (processId: string): Promise<Process | null> => 
     },
   });
   return process;
+}
+
+const generateProcessId = (): string => {
+  const processId = Math.floor(100000000 + Math.random() * 900000000);
+  return `IT${processId}`;
 }
 
 export const getAllProcesses = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -48,17 +54,22 @@ export const getProcessById = asyncHandler(async (req: Request, res: Response, n
 })
 
 export const createProcess = asyncHandler(async (req: Request<{}, {}, ProcessSchemaType["body"]>, res: Response, next: NextFunction): Promise<void> => {
-  const processData: Process = req.body;
-  const user = req.user;
+  const processData = req.body;
+  const userId = req.user?.id;
+  const user = await userPrismaClient.user.findUnique({
+    where: {
+      id: userId,
+    }
+  });
 
-  const { firstName, lastName, phone, assigneeId } = processData;
+  const { firstName, lastName, phone } = processData;
 
-  if (!firstName || !lastName || !phone || !assigneeId) {
+  if (!firstName || !lastName || !phone) {
     return next(new BadRequestError('Please provide all required fields'))
   }
 
   if (user?.role !== 'ADMIN' && user?.role !== 'TEAM_LEAD' && user?.role !== 'TASK_MANAGER') {
-    return next( new ForbiddenError("You don't have permission to perform this action"));
+    return next(new ForbiddenError("You don't have permission to perform this action"));
   }
   
   const process: Process = await processPrismaClient.process.create({
@@ -66,7 +77,8 @@ export const createProcess = asyncHandler(async (req: Request<{}, {}, ProcessSch
         firstName: processData.firstName,
         lastName: processData.lastName,
         phone: processData.phone,
-        assignee: {connect: {id: processData.assigneeId}},
+        processId: generateProcessId(),
+        assignee: {connect: {id: user.id}},
       }
     });
     res.status(201).json({

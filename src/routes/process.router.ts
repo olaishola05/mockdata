@@ -6,12 +6,14 @@ import {
   updateProcess,
   deleteProcess,
 } from '../controllers/process.controller';
+import { authenticate, reqBodyValidator, checkUserRole } from '../middleware';
+import { processSchema } from '../utils';
 
 const processRouter = Router();
 
-processRouter.get('/', getAllProcesses);
-processRouter.get('/:id', getProcessById);
-processRouter.post('/', createProcess);
+processRouter.get('/', authenticate, getAllProcesses);
+processRouter.get('/:id', authenticate, getProcessById);
+processRouter.post('/', [reqBodyValidator(processSchema), authenticate, checkUserRole(["ADMIN", "TASK_MANAGER", "TEAM_LEAD"])], createProcess);
 processRouter.put('/:id', updateProcess);
 processRouter.delete('/:id', deleteProcess);
 
