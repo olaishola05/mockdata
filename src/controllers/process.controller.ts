@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import {Process, PrismaClient, Role } from '@prisma/client';
+import {Process, PrismaClient, Role, User } from '@prisma/client';
 import { BadRequestError, ForbiddenError, NotFoundError, ProcessSchemaType, asyncHandler } from '../utils';
 
 const processPrismaClient = new PrismaClient();
@@ -16,6 +16,16 @@ const checkProcessExist = async (processId: string): Promise<Process | null> => 
   });
   return process;
 }
+
+const getUserRole = async (userId: string): Promise<Role | null> => {
+    const user: User | null = await userPrismaClient.user.findUnique({
+    where: {
+      id: userId,
+    }
+  });
+    return user?.role;
+}
+
 
 const generateProcessId = (): string => {
   const processId = Math.floor(100000000 + Math.random() * 900000000);
