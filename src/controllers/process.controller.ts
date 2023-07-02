@@ -17,13 +17,13 @@ const checkProcessExist = async (processId: string): Promise<Process | null> => 
   return process;
 }
 
-const getUserRole = async (userId: string): Promise<Role | null> => {
+const getUser = async (userId: string): Promise<User | null> => {
     const user: User | null = await userPrismaClient.user.findUnique({
     where: {
       id: userId,
     }
   });
-    return user?.role;
+    return user;
 }
 
 
@@ -66,11 +66,7 @@ export const getProcessById = asyncHandler(async (req: Request, res: Response, n
 export const createProcess = asyncHandler(async (req: Request<{}, {}, ProcessSchemaType["body"]>, res: Response, next: NextFunction): Promise<void> => {
   const processData = req.body;
   const userId = req.user?.id;
-  const user = await userPrismaClient.user.findUnique({
-    where: {
-      id: userId,
-    }
-  });
+  const user = await getUser(userId!);
 
   const { firstName, lastName, phone } = processData;
 
