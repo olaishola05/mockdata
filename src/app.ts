@@ -1,6 +1,6 @@
 import express from 'express';
 import { Request, Response, NextFunction } from 'express';
-import { userRouter, processRouter, authRouter } from './routes';
+import { userRouter, taskRouter, authRouter } from './routes';
 import { errorResponse, errorLogging } from './middleware';
 import * as cors from "cors";
 
@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
-app.use('/api/v1/processes', processRouter);
+app.use('/api/v1/tasks', taskRouter);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction): void => {
   errorResponse(req, res, next, err);

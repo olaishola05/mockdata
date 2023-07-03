@@ -16,11 +16,11 @@ import {
 } from './schema validation/userSchema'
 
 import {
-  processSchema,
-  processUpdateSchema,
-  ProcessSchemaType,
-  ProcessUpdateSchemaType,
-} from "./schema validation/processSchema";
+  taskSchema,
+  taskUpdateSchema,
+  taskSchemaType,
+  taskUpdateSchemaType,
+} from "./schema validation/taskSchema";
 
 export { 
     asyncHandler, NotFoundError, BadRequestError, jwtTokenGenerator, jwtTokenVerifier, UnauthorizedError, ForbiddenError, createUserSchema,
@@ -31,8 +31,8 @@ export {
     passwordResetTokenSchemaType,
     passwordResetSchemaType,
     createUserSchemaType,
-    processSchema,
-    processUpdateSchema,
-    ProcessSchemaType,
-    ProcessUpdateSchemaType,
+    taskSchema,
+    taskUpdateSchema,
+    taskSchemaType,
+    taskUpdateSchemaType,
 }

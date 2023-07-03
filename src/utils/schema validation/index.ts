@@ -11,11 +11,11 @@ import {
 } from "./userSchema";
 
 import {
-  processSchema,
-  processUpdateSchema,
-  ProcessSchemaType,
-  ProcessUpdateSchemaType,
-} from "./processSchema";
+  taskSchema,
+  taskUpdateSchema,
+  taskSchemaType,
+  taskUpdateSchemaType,
+} from "./taskSchema";
 
 
 export {
@@ -27,8 +27,8 @@ export {
     passwordResetTokenSchemaType,
     passwordResetSchemaType,
     createUserSchemaType,
-    processSchema,
-    processUpdateSchema,
-    ProcessSchemaType,
-    ProcessUpdateSchemaType,
+    taskSchema,
+    taskUpdateSchema,
+    taskSchemaType,
+    taskUpdateSchemaType,
 };

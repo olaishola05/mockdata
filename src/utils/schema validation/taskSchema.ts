@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const processSchema = z.object({
+export const taskSchema = z.object({
     body: z.object({
         firstName: z
             .string()
@@ -21,7 +21,7 @@ export const processSchema = z.object({
     }),
 })
 
-export const processUpdateSchema = z.object({
+export const taskUpdateSchema = z.object({
     body: z.object({
         fullName: z
             .string()
@@ -44,8 +44,8 @@ export const processUpdateSchema = z.object({
 })
 
 
-export type ProcessSchemaType = z.infer<typeof processSchema>;
-export type ProcessUpdateSchemaType = z.infer<typeof processUpdateSchema>;
+export type taskSchemaType = z.infer<typeof taskSchema>;
+export type taskUpdateSchemaType = z.infer<typeof taskUpdateSchema>;
 
 
 
