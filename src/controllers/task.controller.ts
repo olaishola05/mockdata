@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import {Task, PrismaClient, User } from '@prisma/client';
-import { BadRequestError, ForbiddenError, NotFoundError, taskSchemaType, asyncHandler } from '../utils';
+import { BadRequestError, ForbiddenError, NotFoundError, asyncHandler } from '../utils';
 
 const taskPrismaClient = new PrismaClient();
 const userPrismaClient = new PrismaClient();
@@ -17,7 +17,7 @@ const checkTaskExist = async (taskId: string): Promise<Task | null> => {
   return task;
 }
 
-const getUser = async (userId: string): Promise<User | null> => {
+export const getUser = async (userId: string): Promise<User | null> => {
     const user: User | null = await userPrismaClient.user.findUnique({
     where: {
       id: userId,
