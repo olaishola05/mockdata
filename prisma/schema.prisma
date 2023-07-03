@@ -36,6 +36,7 @@ model Process {
   lastName String
   phone String
   processId String
+  description String
   assignee User @relation(fields: [assigneeId], references: [id])
   assigneeId String
   createdAt DateTime @default(now())

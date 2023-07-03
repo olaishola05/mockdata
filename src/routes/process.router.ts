@@ -14,7 +14,7 @@ const processRouter = Router();
 processRouter.get('/', authenticate, getAllProcesses);
 processRouter.get('/:id', authenticate, getProcessById);
 processRouter.post('/', [reqBodyValidator(processSchema), authenticate, checkUserRole(["ADMIN", "TASK_MANAGER", "TEAM_LEAD"])], createProcess);
-processRouter.put('/:id', updateProcess);
+processRouter.put('/:id', [reqBodyValidator(processSchema), authenticate, checkUserRole(["ADMIN", "TASK_MANAGER", "TEAM_LEAD"])], updateProcess);
 processRouter.delete('/:id', deleteProcess);
 
 export default processRouter;

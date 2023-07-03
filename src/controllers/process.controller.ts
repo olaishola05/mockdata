@@ -55,7 +55,6 @@ export const getProcessById = asyncHandler(async (req: Request, res: Response, n
     if (!process) {
       return next(new NotFoundError('process'))
     }
-    
     res.status(200).json({
       status: 'success',
       message: 'Process found successfully',
@@ -68,9 +67,9 @@ export const createProcess = asyncHandler(async (req: Request<{}, {}, ProcessSch
   const userId = req.user?.id;
   const user = await getUser(userId!);
 
-  const { firstName, lastName, phone } = processData;
+  const { firstName, lastName, phone, description } = processData;
 
-  if (!firstName || !lastName || !phone) {
+  if (!firstName || !lastName || !phone || !description) {
     return next(new BadRequestError('Please provide all required fields'))
   }
 
@@ -83,6 +82,7 @@ export const createProcess = asyncHandler(async (req: Request<{}, {}, ProcessSch
         firstName: processData.firstName,
         lastName: processData.lastName,
         phone: processData.phone,
+        description: processData.description,
         processId: generateProcessId(),
         assignee: {connect: {id: user.id}},
       }
@@ -97,7 +97,7 @@ export const createProcess = asyncHandler(async (req: Request<{}, {}, ProcessSch
 export const updateProcess = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const processId = req.params.id;
   const checkProcess = await checkProcessExist(processId);
-  const user = req.user;
+  const user = await getUser(req.user?.id!);
 
   if (!checkProcess) {
     return next(new NotFoundError('process'))
@@ -129,17 +129,17 @@ export const updateProcess = asyncHandler(async (req: Request, res: Response, ne
 export const deleteProcess = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const processId = req.params.id;
   const checkProcess = await checkProcessExist(processId);
-  const user = req.user;
+  const user = await getUser(req.user?.id!);
 
   if (!checkProcess) {
     return next(new NotFoundError('process'))
   }
 
-  if(user?.role !== 'ADMIN') {
+  if(user?.role !== 'ADMIN' && user?.role !== 'TEAM_LEAD' && user?.role !== 'TASK_MANAGER') {
     return next( new ForbiddenError("You don't have permission to perform this action"));
   }
   
-  const process: Process = await processPrismaClient.process.delete({
+  await processPrismaClient.process.delete({
       where: {
         id: processId,
       },
@@ -147,6 +147,5 @@ export const deleteProcess = asyncHandler(async (req: Request, res: Response, ne
     res.status(201).json({
       status: 'success',
       message: 'Process deleted successfully',
-      data: process,
     });
 })

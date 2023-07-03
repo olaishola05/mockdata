@@ -14,6 +14,10 @@ export const processSchema = z.object({
             .string()
             .min(3, { message: "Phone must be at least 3 characters" })
             .max(16),
+        description: z
+            .string()
+            .min(3, { message: "Description must be at least 3 characters" })
+            .max(1000),
     }),
 })
 
@@ -31,10 +35,10 @@ export const processUpdateSchema = z.object({
             .string()
             .min(3, { message: "Phone must be at least 3 characters" })
             .max(16),
-        assignedId: z
+        description: z
             .string()
-            .min(3, { message: "Assigned ID must be at least 3 characters" })
-            .max(100),
+            .min(3, { message: "Description must be at least 3 characters" })
+            .max(1000),
     }),
 
 })
