@@ -1,20 +1,14 @@
-import { Router } from 'express';
-import {
-  getAllTasks,
-  getTaskById,
-  createTask,
-  updateTask,
-  deleteTask,
-} from '../controllers/task.controller';
-import { authenticate, reqBodyValidator, checkUserRole } from '../middleware';
-import { taskSchema } from '../utils';
+import { Router } from "express";
+import { getAllProcesses, getProcessById, createProcess, updateProcess, deleteProcess } from "../controllers/process.controller";
+import { authenticate, reqBodyValidator, checkUserRole } from "../middleware";
+import { processSchema } from "../utils";
 
-const taskRouter = Router();
+const processRouter = Router();
 
-taskRouter.get('/', authenticate, getAllTasks);
-taskRouter.get('/:id', authenticate, getTaskById);
-taskRouter.post('/', [reqBodyValidator(taskSchema), authenticate, checkUserRole(["ADMIN", "TASK_MANAGER", "TEAM_LEAD"])], createTask);
-taskRouter.put('/:id', [authenticate, checkUserRole(["ADMIN", "TASK_MANAGER", "TEAM_LEAD"])], updateTask);
-taskRouter.delete('/:id', deleteTask);
+processRouter.get("/", authenticate, getAllProcesses);
+processRouter.get("/:id", authenticate, getProcessById);
+processRouter.post("/", [reqBodyValidator(processSchema), authenticate, checkUserRole(["ADMIN", "TASK_MANAGER", "TEAM_LEAD"])], createProcess);
+processRouter.put("/:id", [authenticate, checkUserRole(["ADMIN", "TASK_MANAGER", "TEAM_LEAD"])], updateProcess);
+processRouter.delete("/:id", deleteProcess);
 
-export default taskRouter;
+export default processRouter;

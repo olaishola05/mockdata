@@ -21,6 +21,10 @@ export const createProcess = asyncHandler(async (req: Request, res: Response, ne
   const userId = req.user?.id;
   const { name, color, icon } = req.body;
 
+  if (!name || !color || !icon) {
+    return next(new BadRequestError('All fields are required'))
+  }
+
   const user: User | null = await getUser(userId!);
 
   if (!user) {

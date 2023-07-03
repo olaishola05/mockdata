@@ -22,6 +22,8 @@ import {
   taskUpdateSchemaType,
 } from "./schema validation/taskSchema";
 
+import { processSchema } from "./schema validation/processSchema";
+
 export { 
     asyncHandler, NotFoundError, BadRequestError, jwtTokenGenerator, jwtTokenVerifier, UnauthorizedError, ForbiddenError, createUserSchema,
     loginSchema,
@@ -35,4 +37,5 @@ export {
     taskUpdateSchema,
     taskSchemaType,
     taskUpdateSchemaType,
+    processSchema
 }

@@ -17,6 +17,8 @@ import {
   taskUpdateSchemaType,
 } from "./taskSchema";
 
+import { processSchema } from "./processSchema";
+
 
 export {
     createUserSchema,
@@ -31,4 +33,5 @@ export {
     taskUpdateSchema,
     taskSchemaType,
     taskUpdateSchemaType,
+    processSchema
 };
