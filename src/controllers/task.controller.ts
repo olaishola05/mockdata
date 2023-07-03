@@ -6,7 +6,7 @@ const taskPrismaClient = new PrismaClient();
 const userPrismaClient = new PrismaClient();
 
 const checkTaskExist = async (taskId: string): Promise<Task | null> => {
-  const task: task | null = await taskPrismaClient.task.findUnique({
+  const task: Task | null = await taskPrismaClient.task.findUnique({
     where: {
       id: taskId,
     },
@@ -62,9 +62,10 @@ export const getTaskById = asyncHandler(async (req: Request, res: Response, next
     });
 })
 
-export const createTask = asyncHandler(async (req: Request<{}, {}, taskSchemaType["body"]>, res: Response, next: NextFunction): Promise<void> => {
-  const taskData = req.body;
+export const createTask = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const taskData: Task = req.body;
   const userId = req.user?.id;
+  const processId = req.params?.id;
   const user = await getUser(userId!);
 
   const { firstName, lastName, phone, description } = taskData;
@@ -85,6 +86,7 @@ export const createTask = asyncHandler(async (req: Request<{}, {}, taskSchemaTyp
         description: taskData.description,
         taskId: generateTaskId(),
         assignee: {connect: {id: user.id}},
+        taskProcess: {connect: {id: processId}},
       }
     });
     res.status(201).json({

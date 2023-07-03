@@ -5,24 +5,35 @@ export const createUserSchema = z.object({
     .object({
       firstName: z
         .string({ required_error: "email is required" })
+        .trim()
         .min(3, { message: "First name must be at least 3 characters" })
         .max(100),
       lastName: z
         .string()
+        .trim()
         .min(2, { message: "Last name must be at least 3 characters" })
         .max(100),
       email: z
         .string({ required_error: "email is required" })
+        .trim()
         // .min(1, { message: "Email is required" })
         .email("Invalid email address"),
       password: z
         .string()
+        .trim()
         .min(6, { message: "Password must be at least 6 characters" })
         .max(100),
       confirmPassword: z
         .string()
+        .trim()
         .min(6, { message: "Password must be at least 6 characters" })
         .max(100),
+      workspace: z.string().optional(),
+      role: z.enum(["ADMIN", "TASK_MANAGER", "TEAM_LEAD", "USER"], {
+        errorMap: (issue, ctx) => {
+          return { message: "Invalid role" };
+        },
+      }),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: "Passwords do not match",

@@ -4,18 +4,22 @@ export const taskSchema = z.object({
     body: z.object({
         firstName: z
             .string()
+            .trim()
             .min(3, { message: "Full name must be at least 3 characters" })
             .max(100),
         lastName: z
             .string()
+            .trim()
             .min(3, { message: "Last name must be at least 3 characters" })
             .max(100),
         phone: z
             .string()
+            .trim()
             .min(3, { message: "Phone must be at least 3 characters" })
             .max(16),
         description: z
             .string()
+            .trim()
             .min(3, { message: "Description must be at least 3 characters" })
             .max(1000),
     }),
