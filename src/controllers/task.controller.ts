@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import {Task, PrismaClient, User } from '@prisma/client';
 import { BadRequestError, ForbiddenError, NotFoundError, asyncHandler } from '../utils';
+import { checkProcessExist } from './process.controller';
 
 const taskPrismaClient = new PrismaClient();
 const userPrismaClient = new PrismaClient();
@@ -33,10 +34,26 @@ const generateTaskId = (): string => {
 }
 
 export const getAllTasks = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const tasks: Task[] = await taskPrismaClient.task.findMany({});
+  const processId = req.params?.id;
+  const findProcess = await checkProcessExist(processId);
+  const user = await getUser(req.user?.id!);
+
+  if (!user) {
+    return next(new ForbiddenError('You are not authorized to view all tasks'))
+  }
+
+  if (!findProcess) {
+    return next(new NotFoundError('process'))
+  }
+
+  const tasks: Task[] = await taskPrismaClient.task.findMany({
+    where: {
+      taskProcessId: processId,
+    },
+  });
 
   if(!tasks) {
-    return next(new NotFoundError('taskes'))
+    return next(new NotFoundError('tasks'))
   }
 
     res.status(200).json({
@@ -51,6 +68,17 @@ export const getAllTasks = asyncHandler(async (req: Request, res: Response, next
 export const getTaskById = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const taskId = req.params.id;
     const task = await checkTaskExist(taskId);
+    const processId = req.params?.processId;
+    const findProcess = await checkProcessExist(processId);
+    const user = await getUser(req.user?.id!);
+
+    if (!user) {
+      return next(new ForbiddenError('You are not authorized to view this task'))
+    }
+
+    if (!findProcess) {
+      return next(new NotFoundError('process'))
+    }
 
     if (!task) {
       return next(new NotFoundError('task'))
@@ -100,6 +128,11 @@ export const updateTask = asyncHandler(async (req: Request, res: Response, next:
   const taskId = req.params.id;
   const checktask = await checkTaskExist(taskId);
   const user = await getUser(req.user?.id!);
+  const process = await checkProcessExist(req.params?.id!);
+
+  if (!process) {
+    return next(new NotFoundError('process'))
+  }
 
   if (!checktask) {
     return next(new NotFoundError('task'))

@@ -5,7 +5,7 @@ import { getUser } from "./task.controller";
 
 const processPrismaClient = new PrismaClient();
 
-const checkProcessExist = async (processId: string): Promise<Process | null> => {
+export const checkProcessExist = async (processId: string): Promise<Process | null> => {
   const process: Process | null = await processPrismaClient.process.findUnique({
     where: {
       id: processId,
