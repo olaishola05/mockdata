@@ -93,7 +93,7 @@ export const getTaskById = asyncHandler(async (req: Request, res: Response, next
 export const createTask = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const taskData: Task = req.body;
   const userId = req.user?.id;
-  const processId = req.params?.id;
+  const processId = req.params?.processId;
   const user = await getUser(userId!);
 
   const { firstName, lastName, phone, description } = taskData;
@@ -128,7 +128,7 @@ export const updateTask = asyncHandler(async (req: Request, res: Response, next:
   const taskId = req.params.id;
   const checktask = await checkTaskExist(taskId);
   const user = await getUser(req.user?.id!);
-  const process = await checkProcessExist(req.params?.id!);
+  const process = await checkProcessExist(req.params?.processId);
 
   if (!process) {
     return next(new NotFoundError('process'))
@@ -165,6 +165,11 @@ export const deleteTask = asyncHandler(async (req: Request, res: Response, next:
   const taskId = req.params.id;
   const checktask = await checkTaskExist(taskId);
   const user = await getUser(req.user?.id!);
+  const process = await checkProcessExist(req.params?.processId);
+
+  if (!process) {
+    return next(new NotFoundError('process'))
+  }
 
   if (!checktask) {
     return next(new NotFoundError('task'))

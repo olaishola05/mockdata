@@ -21,6 +21,6 @@ processRouter.post("/:id/tasks", [reqBodyValidator(taskSchema), authenticate, ch
 processRouter.get("/:processId/tasks/:id", authenticate, getTaskById);
 processRouter.put("/:processId/tasks/:id", [authenticate, checkUserRole(["ADMIN", "TASK_MANAGER", "TEAM_LEAD"])], updateTask);
 processRouter.delete("/:id", deleteProcess);
-processRouter.delete("/:id/tasks/:id", deleteTask);
+processRouter.delete("/:processId/tasks/:id", deleteTask);
 
 export default processRouter;
