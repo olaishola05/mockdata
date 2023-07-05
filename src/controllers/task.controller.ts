@@ -83,17 +83,29 @@ export const getTaskById = asyncHandler(async (req: Request, res: Response, next
     if (!task) {
       return next(new NotFoundError('task'))
     }
+
     res.status(200).json({
       status: 'success',
       message: 'task found successfully',
-      data: task,
+      data: {
+        id: task.id,
+        firstName: task.firstName,
+        lastName: task.lastName,
+        phone: task.phone,
+        taskId: task.taskId,
+        description: task.description,
+        assigneeId: task.assigneeId,
+        taskProcessId: task.taskProcessId,
+        createdAt: task.createdAt,
+        updatedAt: task.updatedAt,
+      }
     });
 })
 
 export const createTask = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const taskData: Task = req.body;
   const userId = req.user?.id;
-  const processId = req.params?.processId;
+  const processId = req.params?.id;
   const user = await getUser(userId!);
 
   const { firstName, lastName, phone, description } = taskData;
@@ -113,7 +125,7 @@ export const createTask = asyncHandler(async (req: Request, res: Response, next:
         phone: taskData.phone,
         description: taskData.description,
         taskId: generateTaskId(),
-        assignee: {connect: {id: user.id}},
+        assignee: {connect: {id: user?.id}},
         taskProcess: {connect: {id: processId}},
       }
     });
@@ -164,8 +176,12 @@ export const updateTask = asyncHandler(async (req: Request, res: Response, next:
 export const deleteTask = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const taskId = req.params.id;
   const checktask = await checkTaskExist(taskId);
-  const user = await getUser(req.user?.id!);
   const process = await checkProcessExist(req.params?.processId);
+  const user = await getUser(req.user?.id!);
+
+  if (user?.role !== 'ADMIN' && user?.role !== 'TEAM_LEAD' && user?.role !== 'TASK_MANAGER') {
+    return next(new ForbiddenError("You don't have permission to perform this action"));
+  }
 
   if (!process) {
     return next(new NotFoundError('process'))
@@ -173,10 +189,6 @@ export const deleteTask = asyncHandler(async (req: Request, res: Response, next:
 
   if (!checktask) {
     return next(new NotFoundError('task'))
-  }
-
-  if(user?.role !== 'ADMIN' && user?.role !== 'TEAM_LEAD' && user?.role !== 'TASK_MANAGER') {
-    return next( new ForbiddenError("You don't have permission to perform this action"));
   }
   
   await taskPrismaClient.task.delete({

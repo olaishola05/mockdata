@@ -20,7 +20,7 @@ processRouter.get("/:id/tasks", authenticate, getAllTasks);
 processRouter.post("/:id/tasks", [reqBodyValidator(taskSchema), authenticate, checkUserRole(["ADMIN", "TASK_MANAGER", "TEAM_LEAD"])], createTask);
 processRouter.get("/:processId/tasks/:id", authenticate, getTaskById);
 processRouter.put("/:processId/tasks/:id", [authenticate, checkUserRole(["ADMIN", "TASK_MANAGER", "TEAM_LEAD"])], updateTask);
-processRouter.delete("/:id", deleteProcess);
-processRouter.delete("/:processId/tasks/:id", deleteTask);
+processRouter.delete("/:id", authenticate, checkUserRole(["ADMIN", "TASK_MANAGER", "TEAM_LEAD"]), deleteProcess);
+processRouter.delete("/:processId/tasks/:id", authenticate, checkUserRole(["ADMIN", "TASK_MANAGER", "TEAM_LEAD"]), deleteTask);
 
 export default processRouter;
