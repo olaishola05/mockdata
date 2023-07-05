@@ -12,7 +12,7 @@ const checkTaskExist = async (taskId: string): Promise<Task | null> => {
       id: taskId,
     },
     include: {
-      assignee: true,
+      assignee: false,
     },
   });
   return task;
@@ -87,18 +87,7 @@ export const getTaskById = asyncHandler(async (req: Request, res: Response, next
     res.status(200).json({
       status: 'success',
       message: 'task found successfully',
-      data: {
-        id: task.id,
-        firstName: task.firstName,
-        lastName: task.lastName,
-        phone: task.phone,
-        taskId: task.taskId,
-        description: task.description,
-        assigneeId: task.assigneeId,
-        taskProcessId: task.taskProcessId,
-        createdAt: task.createdAt,
-        updatedAt: task.updatedAt,
-      }
+      data: task,
     });
 })
 

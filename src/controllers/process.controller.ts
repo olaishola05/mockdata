@@ -11,7 +11,8 @@ export const checkProcessExist = async (processId: string): Promise<Process | nu
       id: processId,
     },
     include: {
-      user: true,
+      user: false,
+      tasks: true,
     },
   });
   return process;
@@ -54,7 +55,7 @@ export const createProcess = asyncHandler(async (req: Request, res: Response, ne
 export const getAllProcesses = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const processes: Process[] = await processPrismaClient.process.findMany({
     include: {
-      user: true,
+      user: false,
     }
   });
   res.status(200).json({
