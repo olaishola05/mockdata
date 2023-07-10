@@ -26,6 +26,8 @@ model User {
   role Role @default(USER)
   workspaces String?
   token String?
+  terms Boolean @default(false)
+  authorization Boolean @default(false)
   isVerified Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

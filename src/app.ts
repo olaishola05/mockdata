@@ -2,14 +2,14 @@ import express from 'express';
 import { Request, Response, NextFunction } from 'express';
 import { userRouter, authRouter, processRouter } from './routes';
 import { errorResponse, errorLogging } from './middleware';
-import * as cors from "cors";
+const cors = require('cors');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors.default());
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.status(200).json({

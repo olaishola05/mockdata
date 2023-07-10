@@ -9,7 +9,7 @@ const authPrismaClient = new PrismaClient();
 export const createUser = asyncHandler(
   async (req: Request<{}, {}, createUserSchemaType["body"]>, res: Response, next: NextFunction): Promise<void> => {
     const userData   = req.body;
-    const { firstName, lastName, email, password, confirmPassword } = userData;
+    const { firstName, lastName, email, password, confirmPassword, workspace, terms, authorization } = userData;
 
     const emailExist = await authPrismaClient.user.findUnique({
       where: {
@@ -21,7 +21,7 @@ export const createUser = asyncHandler(
       return next(new BadRequestError("Email or user already exist"));
     }
 
-    if (!firstName || !lastName || !email || !password || !confirmPassword) {
+    if (!firstName || !lastName || !email || !password || !confirmPassword || !workspace || !terms || !authorization) {
       return next(new BadRequestError("Please provide all required fields"));
     }
 

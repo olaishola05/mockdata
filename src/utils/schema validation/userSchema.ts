@@ -28,6 +28,14 @@ export const createUserSchema = z.object({
         .min(6, { message: "Password must be at least 6 characters" })
         .max(100),
       workspace: z.string().optional(),
+      terms: z.boolean().refine((data) => data === true, {
+        message: "You must accept the terms and conditions",
+        path: ["terms"],
+      }),
+      authorization: z.boolean().refine((data) => data === true, {
+        message: "You must accept the authorization",
+        path: ["authorization"],
+      }),
       role: z.enum(["ADMIN", "TASK_MANAGER", "TEAM_LEAD", "USER"], {
         errorMap: (issue, ctx) => {
           return { message: "Invalid role" };
