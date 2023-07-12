@@ -24,7 +24,7 @@ model User {
   tasks Task[]
   processes Process[]
   role Role @default(USER)
-  workspaces String?
+  workspace String?
   token String?
   terms Boolean @default(false)
   authorization Boolean @default(false)

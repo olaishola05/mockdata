@@ -54,7 +54,7 @@ export const getUserById = asyncHandler(async (req: Request, res: Response, next
       lastName: user?.lastName,
       email: user?.email,
       role: user?.role,
-      workspaces: user?.workspaces,
+      workspace: user?.workspace,
     },
   });
 
